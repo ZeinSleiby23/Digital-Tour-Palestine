@@ -1,0 +1,118 @@
+{% load static %}{% load i18n %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Management Login | St. Mary Center</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,700;1,700&display=swap');
+        
+        :root {
+            --carmel-beige: #f9f7f4;
+            --carmel-brown: #3d2b1f;
+            --carmel-accent: #a68966;
+            --carmel-stone: #d1c7bd;
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            margin: 0;
+            padding: 0;
+        }
+
+        .hero-bg {
+            background: linear-gradient(to bottom, rgba(61, 43, 31, 0.4), rgba(61, 43, 31, 0.7)), 
+                        url("{% static 'images/monastery_icon.png' %}");
+            background-size: cover; 
+            background-position: center; 
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h1 { font-family: 'Playfair Display', serif; }
+
+        .soft-glass {
+            background: rgba(249, 247, 244, 0.85); 
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.2);
+        }
+
+        .input-field {
+            background: white;
+            border: 1px solid var(--carmel-stone);
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus-within {
+            border-color: var(--carmel-accent);
+            box-shadow: 0 0 0 4px rgba(166, 137, 102, 0.1);
+        }
+
+        .btn-login {
+            background-color: var(--carmel-brown);
+            color: white;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-login:hover {
+            background-color: var(--carmel-accent);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="hero-bg p-4">
+
+    <div class="w-full max-w-md soft-glass rounded-[3rem] p-10 md:p-14 relative overflow-hidden">
+        
+        <div class="text-center mb-10">
+            <div class="w-16 h-16 bg-[var(--carmel-accent)]/10 rounded-2xl rotate-12 mx-auto mb-6 flex items-center justify-center border border-[var(--carmel-accent)]/20">
+                <svg class="w-8 h-8 text-[var(--carmel-accent)] -rotate-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                </svg>
+            </div>
+            <h1 class="text-4xl font-bold text-[var(--carmel-brown)] mb-3 italic">Welcome Back</h1>
+            <p class="text-stone-500 text-xs uppercase tracking-[0.2em] font-semibold">Digital Tour Administration</p>
+        </div>
+
+        <form method="post" action="{% url 'login' %}" class="space-y-6">
+            {% csrf_token %}
+            
+            <div class="space-y-1">
+                <label class="text-[10px] uppercase tracking-[0.3em] font-bold text-[var(--carmel-accent)] ml-1">Username</label>
+                <div class="input-field flex items-center rounded-2xl px-4 py-1">
+                    <span class="text-stone-300">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                    </span>
+                    <input type="text" name="username" placeholder="Your account ID" class="w-full bg-transparent p-4 text-[var(--carmel-brown)] outline-none placeholder:text-stone-300 text-sm">
+                </div>
+            </div>
+
+            <div class="space-y-1">
+                <label class="text-[10px] uppercase tracking-[0.3em] font-bold text-[var(--carmel-accent)] ml-1">Password</label>
+                <div class="input-field flex items-center rounded-2xl px-4 py-1">
+                    <span class="text-stone-300">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
+                    </span>
+                    <input type="password" name="password" placeholder="••••••••" class="w-full bg-transparent p-4 text-[var(--carmel-brown)] outline-none placeholder:text-stone-300 text-sm">
+                </div>
+            </div>
+
+            <button type="submit" class="btn-login w-full py-5 rounded-full font-bold text-xs uppercase tracking-[0.4em] shadow-xl mt-4">
+                Sign In
+            </button>
+        </form>
+
+        <div class="mt-12 text-center border-t border-stone-100 pt-8">
+            <p class="text-stone-400 text-[10px] uppercase tracking-widest font-bold">
+                Don't have an account? 
+                <a href="{% url 'register' %}" class="text-[var(--carmel-accent)] hover:underline ml-2">Create Account</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

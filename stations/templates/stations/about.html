@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>About Carmel</title>
+</head>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&family=Cairo:wght@300;400;700&display=swap');
+    
+    :root {
+        --carmel-beige: #f9f7f4; 
+        --carmel-brown: #3d2b1f; 
+        --carmel-accent: #a68966;
+        --carmel-stone: #d1c7bd;
+    }
+
+    body {
+        background-color: var(--carmel-beige);
+        color: #544a42;
+        font-family: 'Inter', 'Cairo', sans-serif;
+        line-height: 1.8;
+    }
+
+    h1, h2 {
+        font-family: 'Playfair Display', serif;
+    }
+
+    .clean-card {
+        background: white;
+        border: 1px solid var(--carmel-stone);
+        border-radius: 2px;
+    }
+</style>
+
+<div class="min-h-screen py-20 px-6 md:px-12" dir="ltr">
+    <article class="max-w-3xl mx-auto space-y-16">
+        
+        <div class="clean-card p-12 md:p-20 shadow-[0_4px_20px_rgba(0,0,0,0.02)]">
+            <header class="text-center mb-16">
+                <span class="text-[10px] tracking-[0.4em] uppercase text-stone-400 mb-4 block">Bethlehem, Palestine</span>
+                <h1 class="text-5xl md:text-6xl text-[var(--carmel-brown)] tracking-tight">
+                    <span class="italic">Carmel Monastery</span>
+                </h1>
+                <div class="mt-10 h-[1px] w-12 bg-[var(--carmel-accent)] mx-auto opacity-50"></div>
+            </header>
+
+            <div class="space-y-10 text-lg md:text-xl font-light text-stone-600">
+                <p class="text-[var(--carmel-brown)] text-2xl font-normal leading-snug">
+                    Welcome to the Carmel of the Holy Child Jesus Monastery—a sanctuary of silence nestled in the heart of Bethlehem.
+                </p>
+
+                <p>
+                    Founded by <span class="text-[var(--carmel-brown)] font-semibold border-b border-stone-200 pb-1">St. Mary of Jesus Crucified</span>, it serves as a home for nuns dedicated to a life of prayer and meditation.
+                </p>
+
+                <blockquote class="my-14 py-10 px-8 bg-[var(--carmel-beige)] border-l-2 border-[var(--carmel-accent)]">
+                    <p class="text-[var(--carmel-brown)] text-2xl italic serif">
+                        "Mary, this house will be called the house of joy and peace."
+                    </p>
+                    <footer class="mt-6 text-[10px] tracking-[0.4em] uppercase font-bold text-[var(--carmel-accent)]">
+                        — Divine Message
+                    </footer>
+                </blockquote>
+
+                <p>
+                    The architecture is deeply symbolic; the monastery is shaped like a <span class="text-[var(--carmel-brown)]">star</span>, while the residence reflects the historic <span class="text-[var(--carmel-brown)]">Tower of David</span>.
+                </p>
+            </div>
+        </div>
+
+        <div class="clean-card p-10 md:p-12 shadow-[0_4px_20px_rgba(0,0,0,0.01)]">
+            <div class="flex items-center justify-between mb-10">
+                <h2 class="text-3xl italic text-[var(--carmel-brown)]">Our Location</h2>
+                <div class="flex items-center gap-2">
+                     <span class="w-2 h-2 rounded-full bg-amber-600"></span>
+                     <span class="text-[10px] tracking-[0.2em] uppercase text-stone-400 font-bold">Find us in Bethlehem</span>
+                </div>
+            </div>
+
+            <div class="rounded-sm overflow-hidden h-80 grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all duration-1000 border border-stone-100">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3395.7876829731674!2d35.1974753!3d31.7011409!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1502d84715f210d7%3A0xc6679b76c8c7d5c!2z2K_ZitixINin2YTZg9ix2YXZhA!5e0!3m2!1sar!2s!4v1700000000000" 
+                    width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy">
+                </iframe>
+            </div>
+        </div>
+
+        <footer class="text-center pt-10">
+            <a href="{% url 'home' %}" class="inline-flex items-center gap-6 text-stone-400 hover:text-[var(--carmel-brown)] transition-all duration-700 group">
+                <span class="h-[1px] w-8 bg-stone-200 group-hover:w-20 group-hover:bg-[var(--carmel-accent)] transition-all"></span>
+                <span class="text-[10px] font-bold tracking-[0.5em] uppercase">Back to Home Page</span>
+            </a>
+        </footer>
+
+    </article>
+</div>
+
+</div>
+</body>
+
+</html>
+

@@ -1,0 +1,145 @@
+{% load static %}{% load i18n %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guestbook - Carmel Monastery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,700;1,700&display=swap');
+        
+        :root {
+            --carmel-beige: #f9f7f4;
+            --carmel-brown: #3d2b1f;
+            --carmel-accent: #a68966;
+            --carmel-stone: #d1c7bd;
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--carmel-beige); 
+            color: #544a42;
+        }
+
+        h1 { font-family: 'Playfair Display', serif; }
+
+        .form-input {
+            background-color: #ffffff;
+            border: 1px solid var(--carmel-stone);
+            border-radius: 1rem;
+            padding: 1.25rem 1.5rem;
+            width: 100%;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: var(--carmel-accent);
+            box-shadow: 0 0 0 4px rgba(166, 137, 102, 0.05);
+        }
+
+        .btn-submit {
+            background-color: var(--carmel-accent);
+            color: white;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-submit:hover {
+            background-color: var(--carmel-brown);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(61, 43, 31, 0.1);
+        }
+
+        .fade-in { animation: fadeIn 1s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-6">
+
+    <div class="max-w-md w-full bg-white rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.03)] border border-[var(--carmel-stone)]/30 p-10 md:p-14 fade-in text-center">
+        
+        <div class="mb-8 flex justify-center">
+            <div class="w-16 h-16 rounded-full bg-[var(--carmel-beige)] flex items-center justify-center text-[var(--carmel-accent)]">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                </svg>
+            </div>
+        </div>
+
+        <h1 class="text-4xl font-bold text-[var(--carmel-brown)] mb-4 italic">Guestbook</h1>
+        <p class="text-stone-400 text-sm font-light leading-relaxed mb-10">
+            Leave us a word, a prayer, or your impressions of your tour in the monastery.
+        </p>
+
+        <form method="POST" action="{% url 'save_feedback' %}" class="space-y-6 text-left">
+            {% csrf_token %}
+            
+            <div>
+                <label class="block text-[10px] uppercase tracking-[0.3em] font-bold text-[var(--carmel-accent)] mb-2 ml-1">Your Name</label>
+                <input type="text" name="name" placeholder="Enter your name" required 
+                       class="form-input text-sm">
+            </div>
+
+            <div>
+                <label class="block text-[10px] uppercase tracking-[0.3em] font-bold text-[var(--carmel-accent)] mb-2 ml-1">Your Message</label>
+                <textarea name="message" rows="4" placeholder="Share your thoughts..." required
+                          class="form-input text-sm resize-none"></textarea>
+            </div>
+
+            <button type="submit" class="btn-submit w-full py-5 rounded-full font-bold text-xs uppercase tracking-[0.4em] mt-4 shadow-lg">
+                Send Message
+            </button>
+        </form>
+
+        <div id="thankYouToast" class="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-[var(--carmel-brown)] text-white px-8 py-4 rounded-full shadow-2xl opacity-0 transition-all duration-500 pointer-events-none z-50">
+    <div class="flex items-center gap-3">
+        <svg class="w-5 h-5 text-[var(--carmel-accent)]" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+        </svg>
+        <span class="text-sm font-bold tracking-widest uppercase">Thank you for your message!</span>
+    </div>
+</div>
+
+<script>
+
+const form = document.querySelector('form');
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        
+        fetch(this.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                const toast = document.getElementById('thankYouToast');
+                toast.classList.remove('opacity-0');
+                toast.classList.add('opacity-100', '-translate-y-5');
+                
+                form.reset();
+                
+                setTimeout(() => {
+                    toast.classList.remove('opacity-100', '-translate-y-5');
+                    toast.classList.add('opacity-0');
+                }, 4000);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+</script>
+
+        <div class="mt-12 pt-8 border-t border-stone-50 text-center">
+            <a href="{% url 'home' %}" class="text-[10px] font-bold uppercase tracking-[0.5em] text-stone-300 hover:text-[var(--carmel-accent)] transition-all">
+                Back to Home Page
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>

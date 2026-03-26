@@ -1,0 +1,133 @@
+
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "Carmel Home Page" %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&family=Playfair+Display:wght@700&display=swap');
+        
+        :root {
+            --carmel-brown: #3d2b1f;    
+            --carmel-accent: #a68966;   
+            --carmel-beige: #f9f7f4;    
+        }
+
+        body { 
+            font-family: 'Cairo', sans-serif; 
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            background-color: var(--carmel-brown);
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(rgba(61, 43, 31, 0.6), rgba(61, 43, 31, 0.7)), 
+                        url("{% static 'images/monastery_icon.png' %}");
+            background-size: cover;
+            background-position: center;
+            filter: blur(7px); 
+            transform: scale(1.1); 
+            z-index: -1;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .title-font {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .btn-main {
+            background-color: var(--carmel-accent);
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-main:hover {
+            background-color: white;
+            color: var(--carmel-brown);
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+<body onclick="playAudio()" ontouchstart="playAudio()">
+
+    <audio id="welcome-audio" loop>
+        <source src="{% static 'audios/welcome.mp3' %}" type="audio/mpeg">
+    </audio>
+
+    <div class="content-wrapper p-8 text-white w-full">
+        
+        <div class="w-full flex justify-start">
+            <form action="{% url 'set_language' %}" method="post">
+                {% csrf_token %}
+                <input name="next" type="hidden" value="{{ request.path }}">
+                <select name="language" onchange="this.form.submit()" 
+                        class="bg-white/10 backdrop-blur-xl text-white border border-white/20 rounded-full px-5 py-2 text-xs font-bold cursor-pointer outline-none hover:bg-white/20 transition-all">
+                    <option value="ar" {% if LANGUAGE_CODE == 'ar' %}selected{% endif %} class="text-black">العربية</option>
+                    <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %} class="text-black">English</option>
+                </select>
+            </form>
+        </div>
+
+        <div class="text-center">
+            <h1 class="title-font text-4xl md:text-6xl font-bold drop-shadow-2xl mb-4 tracking-tight">
+                {% trans "Center of" %}<br>
+                <span class="text-white">St. Mary of Jesus Crucified</span>
+            </h1>
+            <div class="h-[1px] w-24 bg-white/40 mx-auto mt-6"></div>
+        </div>
+
+        <div class="w-full max-w-xs space-y-6 mb-16">
+            
+            <a href="{% url 'tour' %}" class="btn-main block w-full py-5 rounded-full font-bold text-xl text-center tracking-widest uppercase">
+                {% trans "Let's Start!" %}
+            </a>
+            
+            <a href="{% url 'about' %}" class="block w-full bg-white/5 backdrop-blur-md text-white py-4 rounded-full font-medium text-center border border-white/20 hover:bg-white/10 transition-all">
+                {% trans "About Monastery" %}
+            </a>
+
+            <div class="py-4 flex items-center before:flex-1 before:border-t before:border-white/10 after:flex-1 after:border-t after:border-white/10 px-2">
+                <span class="px-3 text-[9px] text-white/40 font-bold uppercase tracking-[0.4em]">{% trans "For Administration" %}</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <a href="{% url 'login' %}" class="bg-white/5 backdrop-blur-sm border border-white/10 py-3 rounded-xl text-center text-xs font-bold hover:bg-white/10 transition">
+                    {% trans "Log In" %}
+                </a>
+                <a href="{% url 'register' %}" class="bg-white/5 backdrop-blur-sm border border-white/10 py-3 rounded-xl text-center text-xs font-bold hover:bg-white/10 transition">
+                    {% trans "Register" %}
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function playAudio() {
+            const audio = document.getElementById('welcome-audio');
+            if (audio.paused) {
+                audio.play().catch(e => console.log("Audio play blocked"));
+            }
+        }
+    </script>
+
+</body>
+</html>

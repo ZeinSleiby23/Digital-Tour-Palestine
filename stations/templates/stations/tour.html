@@ -1,0 +1,122 @@
+{% load static %}{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans 'Center Tour' %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap');
+        
+        :root {
+            --carmel-beige: #f9f7f4;
+            --carmel-brown: #3d2b1f;
+            --carmel-accent: #a68966;
+            --carmel-stone: #d1c7bd;
+        }
+
+        body { 
+            font-family: 'Cairo', sans-serif; 
+            background-color: var(--carmel-beige); 
+            color: #544a42;
+        }
+
+        h2 { font-family: 'Playfair Display', serif; }
+
+        .fade-in { animation: fadeIn 0.8s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .btn-next {
+            background-color: var(--carmel-accent);
+            color: white;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-next:hover {
+            background-color: var(--carmel-brown);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(61, 43, 31, 0.2);
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-12">
+    <div id="station-card" class="max-w-3xl mx-auto bg-white rounded-[1.5rem] shadow-[0_10px_50px_rgba(0,0,0,0.03)] p-8 md:p-14 border border-[var(--carmel-stone)]/30 fade-in">
+        
+        <div class="flex justify-between items-center mb-10">
+            <span class="border border-[var(--carmel-accent)] text-[var(--carmel-accent)] px-5 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-[0.3em]">
+                {% trans "Station" %} <span id="st-num">1</span>
+            </span>
+            <a href="{% url 'home' %}" class="text-stone-300 hover:text-[var(--carmel-brown)] transition-all text-xl">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </a>
+        </div>
+
+        <h2 id="st-title" class="text-4xl md:text-5xl font-bold text-[var(--carmel-brown)] mb-10 text-center leading-tight italic">...</h2>
+
+        <div id="video-container" class="rounded-xl overflow-hidden bg-stone-900 aspect-video mb-10 shadow-2xl border border-[var(--carmel-stone)]/20">
+            <video id="st-video" playsinline controls class="w-full h-full opacity-90">
+                <source src="" type="video/mp4">
+            </video>
+        </div>
+
+        <div id="audio-container" class="mb-10 bg-[var(--carmel-beige)] p-6 rounded-xl border border-[var(--carmel-stone)]/30">
+             <p class="text-[9px] text-[var(--carmel-accent)] mb-4 uppercase tracking-[0.4em] text-center font-black">{% trans "Audio Guide" %}</p>
+             <audio id="st-audio" controls class="w-full h-10 mix-blend-multiply opacity-80">
+                <source src="" type="audio/mpeg">
+            </audio>
+        </div>
+
+        <div class="bg-white rounded-xl mb-12">
+            <p id="st-desc" class="text-stone-600 leading-[2] text-lg md:text-xl font-light text-justify px-2 italic"></p>
+        </div>
+        
+        <button onclick="fetchNext()" id="nextBtn" class="btn-next w-full py-6 rounded-full font-bold text-sm uppercase tracking-[0.3em] flex items-center justify-center gap-4 group">
+            <span>{% trans "Next" %}</span>
+            <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+        </button>
+    </div>
+
+    <script>
+        let order = 1; 
+
+        function fetchNext() {
+            const btn = document.getElementById('nextBtn');
+            btn.disabled = true; 
+            
+            fetch(`/api/station/${order}/`)
+            .then(res => {
+                if (!res.ok) throw new Error('EndTour');
+                return res.json();
+            })
+            .then(data => {
+                document.getElementById('st-title').innerText = data.title;
+                document.getElementById('st-desc').innerText = data.desc;
+                document.getElementById('st-num').innerText = data.order;
+
+                const video = document.getElementById('st-video');
+                if (data.video) {
+                    video.src = data.video;
+                    video.load();
+                    video.play().catch(e => console.log("Video blocked"));
+                }
+
+                const audio = document.getElementById('st-audio');
+                if (data.audio) {
+                    audio.src = data.audio;
+                    audio.load();
+                    audio.play().catch(e => console.log("Audio blocked"));
+                }
+
+                order++;
+                btn.disabled = false;
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            })
+            .catch(err => {
+                window.location.href = "{% url 'guestbook' %}";
+            });
+        }
+
+        window.onload = fetchNext;
+    </script>
+</body>
+</html>

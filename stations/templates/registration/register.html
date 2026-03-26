@@ -1,0 +1,140 @@
+{% load static %}{% load i18n %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Account | St. Mary Center</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,700;1,700&display=swap');
+        
+        :root {
+            --carmel-beige: #f9f7f4;
+            --carmel-brown: #3d2b1f;
+            --carmel-accent: #a68966;
+            --carmel-stone: #d1c7bd;
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            margin: 0;
+            padding: 0;
+        }
+
+        .bg-monastery {
+            background: linear-gradient(to bottom, rgba(61, 43, 31, 0.5), rgba(61, 43, 31, 0.8)), 
+                        url("{% static 'images/monastery_icon.png' %}");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h2 { font-family: 'Playfair Display', serif; }
+
+        .soft-glass {
+            background: rgba(249, 247, 244, 0.88);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.25);
+        }
+
+        form p { 
+            margin-bottom: 1.25rem; 
+            display: flex; 
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        form label {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--carmel-accent);
+            padding-left: 0.5rem;
+        }
+
+        form input { 
+            width: 100%; 
+            background: white; 
+            border: 1px solid var(--carmel-stone);
+            padding: 12px 18px; 
+            border-radius: 1.25rem; 
+            color: var(--carmel-brown); 
+            outline: none; 
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        form input:focus {
+            border-color: var(--carmel-accent);
+            box-shadow: 0 0 0 4px rgba(166, 137, 102, 0.1);
+        }
+
+        .helptext { 
+            font-size: 0.7rem; 
+            color: #8c7e73; 
+            line-height: 1.4;
+            margin-top: 4px;
+            padding: 0 0.5rem;
+        }
+
+        .errorlist {
+            color: #b91c1c;
+            font-size: 0.75rem;
+            font-weight: 600;
+            list-style: none;
+            margin-bottom: 12px;
+            padding: 0;
+        }
+
+        .btn-register {
+            background-color: var(--carmel-brown);
+            color: white;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-register:hover {
+            background-color: var(--carmel-accent);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="bg-monastery p-4 md:p-8">
+
+    <div class="w-full max-w-lg soft-glass p-8 md:p-14 rounded-[3.5rem] relative overflow-hidden">
+        
+        <div class="text-center mb-10">
+            <h2 class="text-4xl font-bold italic text-[var(--carmel-brown)]">Create Account</h2>
+            <div class="h-1 w-12 bg-[var(--carmel-accent)] mx-auto mt-4 rounded-full"></div>
+            <p class="mt-4 text-stone-500 text-[10px] uppercase tracking-[0.2em] font-semibold">Join the Digital Tour Management Team</p>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="bg-white/40 p-6 md:p-8 rounded-[2.5rem] mb-8 border border-white/60">
+                {{ form.as_p }}
+            </div>
+
+            <button type="submit" class="btn-register w-full py-5 rounded-full font-bold text-xs uppercase tracking-[0.4em] shadow-xl transition-all active:scale-95">
+                Confirm Registration
+            </button>
+        </form>
+
+        <div class="mt-10 text-center border-t border-stone-100 pt-8">
+            <p class="text-stone-400 text-[10px] uppercase tracking-widest font-bold">
+                Already have an account? 
+                <a href="{% url 'login' %}" class="text-[var(--carmel-accent)] hover:underline ml-2">Sign In</a>
+            </p>
+        </div>
+    </div>
+
+</body>
+</html>
