@@ -4,9 +4,6 @@
 
 # Overview | 
 **The Digital Tour Guide** is a scalable, high-performance web platform engineered to bridge the "Information Gap" in Palestine’s historical and sacred sites. By turning silent monuments into living narratives through QR code integration, this project ensures that the true story of our national identity is accessible, verified, and eternal.
-
-**الدليل الرقمي** هو منصة ويب متطورة وقابلة للتوسع، صُممت لسد "الفجوة المعلوماتية" في المواقع التاريخية والمقدسة في فلسطين. من خلال تحويل المعالم الصامتة إلى روايات حية عبر تقنية الـ QR Code، يضمن هذا المشروع أن تظل القصة الحقيقية لهويتنا الوطنية متاحة، موثقة، وأبدية.
-
 ---
 
 # Tech Stack | 
